@@ -182,10 +182,19 @@
       render(filtered);
     }
 
-    // Инициализация
+        // Инициализация
     render(OPЕКА = OPEKA);
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
+
+    // Читаем параметр из ссылки (например, ?filter=kdn)
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    
+    // Если бот передал параметр kdn, автоматически переключаем вкладку
+    if (filterParam === 'kdn') {
+        switchTab('kdn');
+    }
   </script>
 </body>
 </html>
