@@ -133,10 +133,9 @@
 
     // Функция для копирования текста
     function copyToClipboard(text) {
-      // Пытаемся использовать современный API
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
-          showNotification("Номер скопирован!");
+          showNotification("Номер скопирован: " + text + "\n\nВставьте его в приложение 'Телефон' для звонка.");
         }).catch(() => {
           fallbackCopy(text);
         });
@@ -145,7 +144,6 @@
       }
     }
 
-    // Запасной метод для старых телефонов
     function fallbackCopy(text) {
       const textArea = document.createElement("textarea");
       textArea.value = text;
@@ -153,14 +151,13 @@
       textArea.select();
       try {
         document.execCommand('copy');
-        showNotification("Номер скопирован!");
+        showNotification("Номер скопирован: " + text);
       } catch (err) {
-        showNotification("Ошибка копирования. Выделите номер вручную.");
+        showNotification("Ошибка копирования.");
       }
       document.body.removeChild(textArea);
     }
 
-    // Показываем всплывающее окно Телеграма
     function showNotification(msg) {
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showAlert) {
         window.Telegram.WebApp.showAlert(msg);
