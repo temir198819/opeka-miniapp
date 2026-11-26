@@ -3,172 +3,193 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Контакты опеки КБР</title>
+  <title>Опека КБР</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { font-family: system-ui, sans-serif; padding: 16px; background: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); margin: 0; padding-bottom: 40px;}
-    h1 { font-size: 1.3rem; margin-bottom: 12px; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
-    .tab { flex: 1; padding: 8px; text-align: center; border-radius: 10px; background: #eee; cursor: pointer; font-size: 0.9rem; color: #000; }
-    .tab.active { background: #2AABEE; color: #fff; }
-    input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 12px; font-size: 1rem; box-sizing: border-box; }
+    /* Настройка цветов (подстраивается под тему телеграма) */
+    :root {
+      --bg-color: var(--tg-theme-bg-color, #f4f7f6);
+      --text-color: var(--tg-theme-text-color, #2c3e50);
+      --hint-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+      --primary: #0077B6; /* Морской синий */
+      --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+      --shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    body { 
+      font-family: 'Segoe UI', system-ui, sans-serif; 
+      padding: 20px; 
+      background: var(--bg-color); 
+      color: var(--text-color); 
+      margin: 0; 
+      padding-bottom: 40px;
+    }
+
+    h1 { 
+      font-size: 1.5rem; 
+      margin-bottom: 20px; 
+      text-align: center;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .tabs { 
+      display: flex; 
+      gap: 10px; 
+      margin-bottom: 20px; 
+      background: rgba(0,0,0,0.05);
+      padding: 5px;
+      border-radius: 12px;
+    }
     
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; margin-bottom: 10px; background: var(--tg-theme-secondary-bg-color, #f5f5f5); cursor: pointer; transition: 0.2s; }
-    .card:hover { border-color: #2AABEE; }
-    .card b { font-size: 1rem; color: #2AABEE; }
-    .small { font-size: 0.85rem; opacity: 0.8; }
-    a { color: #2AABEE; text-decoration: none; font-weight: bold; }
+    .tab { 
+      flex: 1; 
+      padding: 10px; 
+      text-align: center; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 0.95rem; 
+      font-weight: 600;
+      transition: 0.3s;
+      color: var(--text-color);
+    }
     
-    /* Стили для карточки района */
-    .details { display: none; border: 2px solid #2AABEE; border-radius: 12px; padding: 16px; margin-bottom: 16px; background: var(--tg-theme-bg-color, #fff); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .details h2 { margin-top: 0; font-size: 1.2rem; color: #2AABEE; margin-bottom: 12px; }
-    .details p { margin: 8px 0; font-size: 0.95rem; line-height: 1.4; }
-    .btn-close { display: block; width: 100%; padding: 10px; background: #2AABEE; color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; margin-top: 16px; cursor: pointer; }
+    .tab.active { 
+      background: var(--primary); 
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 119, 182, 0.3);
+    }
+
+    input { 
+      width: 100%; 
+      padding: 14px; 
+      border-radius: 12px; 
+      border: 2px solid transparent; 
+      background: var(--card-bg); 
+      color: var(--text-color);
+      margin-bottom: 20px; 
+      font-size: 1rem; 
+      box-sizing: border-box; 
+      box-shadow: var(--shadow);
+      transition: 0.3s;
+    }
+    input:focus { outline: none; border-color: var(--primary); }
+
+    /* Карточки */
+    .card { 
+      border: none; 
+      border-radius: 16px; 
+      padding: 16px; 
+      margin-bottom: 12px; 
+      background: var(--card-bg); 
+      box-shadow: var(--shadow);
+      cursor: pointer; 
+      transition: transform 0.2s, box-shadow 0.2s; 
+      border-left: 5px solid transparent;
+    }
+    
+    .card:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      border-left-color: var(--primary);
+    }
+    
+    .card b { 
+      font-size: 1.1rem; 
+      color: var(--primary); 
+      display: block;
+      margin-bottom: 6px;
+    }
+    
+    .small { 
+      font-size: 0.9rem; 
+      opacity: 0.8; 
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* Желтая плашка */
+    #hint-box { 
+      background: #FFF3CD; 
+      color: #856404; 
+      padding: 16px; 
+      border-radius: 12px; 
+      margin-bottom: 20px; 
+      font-size: 0.95rem; 
+      border-left: 5px solid #FFC107; 
+      line-height: 1.5;
+      box-shadow: var(--shadow);
+      display: none;
+    }
   </style>
 </head>
 <body>
   <h1>📍 Опека и КДН КБР</h1>
-    <div id="hint-box" style="display: none; background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.95rem; border: 1px solid #ffeeba; line-height: 1.4;">
+  
+  <div id="hint-box">
     <b>💡 КУДА ОБРАЩАТЬСЯ:</b><br>
     <span id="hint-text"></span>
   </div>
-  <input id="search" placeholder="Поиск по району или адресу..." oninput="filter()">
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" onclick="switchTab('opeka')">Опека</div>
+    <div class="tab" onclick="switchTab('kdn')">КДН</div>
+  </div>
   
-  <div id="details-view" class="details"></div>
+  <input id="search" placeholder="🔍 Поиск по району или адресу..." oninput="filter()">
+  
   <div id="list"></div>
 
   <script>
-    // Данные по ОПЕКЕ с сайта и из твоих документов
     const OPEKA = [
-      {
-        name: "г.о. Нальчик", addr: "г. Нальчик, пр. Шогенцукова, 17", phone: "(8662) 42-64-13",
-        head: "Улаков Салим Курманбекович", spec: "Хараева Иола Анатольевна, Бирсова Шовина Лериевна", specPhone: "(8662) 42-49-85", hours: "Пн, Чт 9:00–13:00, 14:00–18:00"
-      },
-      {
-        name: "г.о. Прохладный", addr: "г. Прохладный, ул. Головко, д. 345", phone: "8(86631) 4-25-67",
-        head: "Чубова Елена Сергеевна", spec: "Бондаренко М.А., Голубничая И.В., Шаповалова Т.Н., Шанкова З.А., Баун А.О.", specPhone: "8(86631) 4-25-67", hours: "Пн, Чт 09:00–18:00"
-      },
-      {
-        name: "г.о. Баксан", addr: "г. Баксан, ул. Буденного, 91 (юр.), ул. Ленина, 21 (факт.)", phone: "(886634) 4-12-54",
-        head: "Канукоева Динара Хасановна", spec: "Апанасов Р.А., Хамукова И.Н., Хашпаков А.Х., Дугужева М.А., Даурова М.А.", specPhone: "(886634) 4-12-54", hours: "Пн–Пт 9:00–18:00, перерыв 13–14"
-      },
-      {
-        name: "Баксанский район", addr: "г. Баксан, ул. им. Ю.А. Гагарина, 1е", phone: "(886634) 2-10-75",
-        head: "Кумыкова Анжела Мусабиевна", spec: "Губжокова Ф.Б., Кумыкова А.М., Шидова Д.Х., Шибзухова Ф.Х.", specPhone: "(886634) 2-10-75", hours: "Пн–Пт 9:00–18:00, перерыв 13–14"
-      },
-      {
-        name: "Зольский район", addr: "п. Залукокоаже, ул. им. И.Ц. Котова, 16", phone: "8(86637) 4-15-44",
-        head: "Жирикова Аминат Бубовна", spec: "Махова А.Х., Кокова М.М., Теуважева М.А., Акежева О.Л.", specPhone: "8(86637) 4-15-44", hours: "Пн–Пт 9:00–18:00"
-      },
-      {
-        name: "Лескенский район", addr: "с. Анзорей, ул. Шинахова, 1а", phone: "(886639) 9-54-11",
-        head: "Абазова Залина Аслановна", spec: "Ханикова М.М., Хачетлова А.А.", specPhone: "(886639) 9-54-11", hours: "Пн–Чт 9:00–18:00, перерыв 13–14"
-      },
-      {
-        name: "Майский район", addr: "г. Майский, ул. Ленина, 27/2", phone: "(86633) 21-7-01",
-        head: "Тменова Залина Юрьевна", spec: "Дзадзиева О.В., Водогрецкая Н.В., Барагунова В.Р.", specPhone: "8(86633) 21-7-01", hours: "Пн–Чт 8:00–17:00, перерыв 12–13"
-      },
-      {
-        name: "Прохладненский район", addr: "г. Прохладный, ул. Красноармейская, д.129", phone: "(86631) 7-67-90",
-        head: "Казакова Анна Владимировна", spec: "Кесель Т.В., Адамокова И.С., Филимонова А.В., Мотлох С.Ф.", specPhone: "(86631) 7-59-48", hours: "Пн–Чт 8:00–17:00, Пт 8:00–12:00, перерыв 12–13"
-      },
-      {
-        name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15а", phone: "8(86632) 4-18-47",
-        head: "Дудуева Маргарита Хамишевна", spec: "Бекишева Р.Х., Балкарова З.Р., Абазова М.А., Тумова Д.О., Шомахова М.В.", specPhone: "8(86632) 4-18-47", hours: "Пн–Чт 8:45–18:00, Пт 8:45–16:45, перерыв 13–14"
-      },
-      {
-        name: "Урванский район", addr: "г. Нарткала, ул. Ленина, 35", phone: "(86635) 4-30-62",
-        head: "Эркенова Марина Мурадиновна", spec: "Тлежукова Р.К., Кагермазова И.В., Тлежукова К.Ю., Ивазова Л.Э.", specPhone: "(86635) 4-30-62", hours: "Пн 14:00–18:00, Вт–Чт 9:00–13:00"
-      },
-      {
-        name: "Чегемский район", addr: "г. Чегем, ул. Баксанское шоссе, 26", phone: "8(86630) 4-10-48",
-        head: "Ахиева Анжела Артуровна", spec: "Бижева С.З., Кулиева Л.И., Шанова Ф.Х., Гучаева Л.М., Гукетлова И.А.", specPhone: "8(86630) 4-10-48", hours: "Пн–Пт 9:00–18:00, перерыв 13–14"
-      },
-      {
-        name: "Черекский район", addr: "п.г.т. Кашхатау, ул. К. Мечиева, 108", phone: "8(86636) 4-10-20",
-        head: "Кульбаева Халимат Магомедовна", spec: "Хозаева С.Б., Иттиев К.М., Чеченов М.М.", specPhone: "(86636) 4-10-20", hours: "Пн, Вт, Чт 9:00–18:00"
-      },
-      {
-        name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский, 39", phone: "(86638) 4-37-52",
-        head: "Моллаев Азамат Иман-Алимович", spec: "Карданова М.Б., Хаджиева Х.З., Моллаева Л.Б., Макитов Р.Б.", specPhone: "(86638) 4-37-52", hours: "9:00–18:00, перерыв 13–14"
-      }
+      { name: "г.о. Нальчик", addr: "г. Нальчик, пр. Шогенцукова, 17", phone: "(8662) 42-64-13" },
+      { name: "г.о. Прохладный", addr: "г. Прохладный, ул. Головко, д. 345", phone: "8(86631) 4-25-67" },
+      { name: "г.о. Баксан", addr: "г. Баксан, ул. Буденного, 91 (юр.), ул. Ленина, 21 (факт.)", phone: "(886634) 4-12-54" },
+      { name: "Баксанский район", addr: "г. Баксан, ул. им. Ю.А. Гагарина, 1е", phone: "(886634) 2-10-75" },
+      { name: "Зольский район", addr: "п. Залукокоаже, ул. им. И.Ц. Котова, 16", phone: "8(86637) 4-15-44" },
+      { name: "Лескенский район", addr: "с. Анзорей, ул. Шинахова, 1а", phone: "(886639) 9-54-11" },
+      { name: "Майский район", addr: "г. Майский, ул. Ленина, 27/2", phone: "(86633) 21-7-01" },
+      { name: "Прохладненский район", addr: "г. Прохладный, ул. Красноармейская, д.129", phone: "(86631) 7-67-90" },
+      { name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15а", phone: "8(86632) 4-18-47" },
+      { name: "Урванский район", addr: "г. Нарткала, ул. Ленина, 35", phone: "(86635) 4-30-62" },
+      { name: "Чегемский район", addr: "г. Чегем, ул. Баксанское шоссе, 26", phone: "8(86630) 4-10-48" },
+      { name: "Черекский район", addr: "п.г.т. Кашхатау, ул. К. Мечиева, 108", phone: "8(86636) 4-10-20" },
+      { name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский, 39", phone: "(86638) 4-37-52" }
     ];
 
     const KDN = [
-      {name:"Урванский район", addr:"г.п. Нарткала, ул. Ленина д.37 каб.6", phone:"8(86635) 4-10-70"},
-      {name:"Эльбрусский район", addr:"г.п. Тырныауз, пр. Эльбрусский д.39", phone:"8(86638) 4-72-15"},
-      {name:"Терский район", addr:"г.п. Терек, ул. Ленина, 15, каб.100", phone:"8(86632) 4-17-44"},
-      {name:"Баксанский район", addr:"г. Баксан, ул. Гагарина, 1Е", phone:"8(86634) 4-12-28"},
-      {name:"Лескенский район", addr:"с. Анзорей, Шинахова 1А", phone:"8(86639) 9-56-0"},
-      {name:"Чегемский район", addr:"г.п. Чегем, Баксанское шоссе, 3", phone:"8(86630) 4-00-27"},
-      {name:"г. Баксан", addr:"пр-кт Ленина, 21, каб. 14", phone:"8(86634) 2-13-91"},
-      {name:"Черекский район", addr:"п. Кашхатау, ул. Мечиева 108", phone:"—"},
-      {name:"Зольский район", addr:"п. Залукокоаже, ул. Комсомольская, 89", phone:"8(86637) 4-16-68"},
-      {name:"г. Нальчик", addr:"ул. Кешокова, 70", phone:"8(8662) 77-48-60"},
-      {name:"г. Прохладный", addr:"г. Прохладный", phone:"8(86631) 4-14-49"},
-      {name:"Прохладненский район", addr:"ул. Гагарина, 47, каб. 401", phone:"8(86631) 4-11-48"},
-      {name:"Майский район", addr:"ул. Энгельса, 68", phone:"8(86633) 23-7-25"}
+      { name: "Урванский район", addr: "г.п. Нарткала, ул. Ленина д.37 каб.6", phone: "8(86635) 4-10-70" },
+      { name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский д.39", phone: "8(86638) 4-72-15" },
+      { name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15, каб.100", phone: "8(86632) 4-17-44" },
+      { name: "Баксанский район", addr: "г. Баксан, ул. Гагарина, 1Е", phone: "8(86634) 4-12-28" },
+      { name: "Лескенский район", addr: "с. Анзорей, Шинахова 1А", phone: "8(86639) 9-56-0" },
+      { name: "Чегемский район", addr: "г.п. Чегем, Баксанское шоссе, 3", phone: "8(86630) 4-00-27" },
+      { name: "г. Баксан", addr: "пр-кт Ленина, 21, каб. 14", phone: "8(86634) 2-13-91" },
+      { name: "Черекский район", addr: "п. Кашхатау, ул. Мечиева 108", phone: "—" },
+      { name: "Зольский район", addr: "п. Залукокоаже, ул. Комсомольская, 89", phone: "8(86637) 4-16-68" },
+      { name: "г. Нальчик", addr: "ул. Кешокова, 70", phone: "8(8662) 77-48-60" },
+      { name: "г. Прохладный", addr: "г. Прохладный", phone: "8(86631) 4-14-49" },
+      { name: "Прохладненский район", addr: "ул. Гагарина, 47, каб. 401", phone: "8(86631) 4-11-48" },
+      { name: "Майский район", addr: "ул. Энгельса, 68", phone: "8(86633) 23-7-25" }
     ];
 
     let currentTab = 'opeka';
 
     function switchTab(tab) {
       currentTab = tab;
-      document.getElementById('details-view').style.display = 'none'; // Скрываем карточку при смене вкладки
-      document.getElementById('search').value = ''; // Очищаем поиск
+      document.getElementById('search').value = ''; 
       document.querySelectorAll('.tab').forEach((el, i) => {
         el.classList.toggle('active', (tab === 'opeka' && i === 0) || (tab === 'kdn' && i === 1));
       });
       filter();
     }
 
-    function openDetails(index) {
-      const data = currentTab === 'opeka' ? OPEKA : KDN;
-      const item = data[index];
-      const detailsView = document.getElementById('details-view');
-      
-      if (currentTab === 'opeka') {
-        detailsView.innerHTML = `
-          <h2>${item.name}</h2>
-          <p><b>🏠 Адрес:</b> ${item.addr}</p>
-          <p><b>👤 Начальник:</b> ${item.head}</p>
-          <p><b>📞 Тел. начальника:</b> <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></p>
-          <p><b>👥 Специалисты:</b> ${item.spec}</p>
-          <p><b>📞 Тел. специалистов:</b> <a href="tel:${item.specPhone.replace(/[^+\d]/g,'')}">${item.specPhone}</a></p>
-          <p><b>🕒 Прием:</b> ${item.hours}</p>
-          <button class="btn-close" onclick="closeDetails()">Закрыть</button>
-        `;
-      } else {
-        detailsView.innerHTML = `
-          <h2>${item.name}</h2>
-          <p><b>🏠 Адрес:</b> ${item.addr}</p>
-          <p><b>📞 Телефон:</b> <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></p>
-          <button class="btn-close" onclick="closeDetails()">Закрыть</button>
-        `;
-      }
-      
-      detailsView.style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокрутка вверх
-      
-      // Прячем список, чтобы не мешал
-      document.getElementById('search').style.display = 'none';
-      document.getElementById('tabs').style.display = 'none';
-      document.getElementById('list').style.display = 'none';
-    }
-
-    function closeDetails() {
-      document.getElementById('details-view').style.display = 'none';
-      document.getElementById('search').style.display = 'block';
-      document.getElementById('tabs').style.display = 'flex';
-      document.getElementById('list').style.display = 'block';
-    }
-
-        function render(items) {
+    function render(items) {
       document.getElementById('list').innerHTML = items.map((o, index) => `
         <a href="detail.html?type=${currentTab}&id=${index}" style="text-decoration: none; color: inherit;">
           <div class="card">
-            <b>${o.name} ➔</b><br>
-            <span class="small">🏠 ${o.addr}</span><br>
+            <b>${o.name} ➔</b>
+            <span class="small">🏠 ${o.addr}</span>
             <span class="small">📞 ${o.phone}</span>
           </div>
         </a>
@@ -182,22 +203,17 @@
       render(filtered);
     }
 
-           // Инициализация
+    // Инициализация
     render(OPЕКА = OPEKA);
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
 
-    // Читаем параметры из ссылки
     const urlParams = new URLSearchParams(window.location.search);
     const filterParam = urlParams.get('filter');
     const hintParam = urlParams.get('hint');
 
-    // Если бот передал параметр kdn, переключаем вкладку
-    if (filterParam === 'kdn') {
-        switchTab('kdn');
-    }
+    if (filterParam === 'kdn') switchTab('kdn');
 
-    // Если бот передал подсказку (hint), показываем её
     if (hintParam) {
         document.getElementById('hint-text').innerText = decodeURIComponent(hintParam);
         document.getElementById('hint-box').style.display = 'block';
