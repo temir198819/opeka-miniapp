@@ -6,60 +6,63 @@
   <title>Опека КБР</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    /* Минималистичный дизайн */
+    /* Нежно-мятная палитра */
     :root {
-      --bg: var(--tg-theme-bg-color, #ffffff);
-      --text: var(--tg-theme-text-color, #000000);
-      --hint: var(--tg-theme-hint-color, #999999);
-      --primary: #0052FF; /* Яркий синий (как в Revolut/Тинькофф) */
-      --card: var(--tg-theme-secondary-bg-color, #f2f2f7);
+      --bg-color: var(--tg-theme-bg-color, #f4f9f4); /* Светло-мятный фон */
+      --text-color: var(--tg-theme-text-color, #1b3320);
+      --hint-color: var(--tg-theme-hint-color, #6b8e6b);
+      --primary-color: #208a4f; /* Изумрудный */
+      --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+      --hint-box-bg: #e8f5e9;
+      --hint-box-text: #2e7d32;
     }
 
     * { box-sizing: border-box; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background: var(--bg-color); 
+      color: var(--text-color); 
+      margin: 0; 
       padding: 16px;
       padding-bottom: 40px;
     }
 
-    h1 {
-      font-size: 24px;
+    h1 { 
+      font-size: 24px; 
       font-weight: 800;
-      margin-bottom: 20px;
+      margin-bottom: 20px; 
       letter-spacing: -0.5px;
+      color: var(--primary-color);
     }
 
-    /* Переключатели вкладок */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
+    .tabs { 
+      display: flex; 
+      gap: 8px; 
+      margin-bottom: 16px; 
+      background: rgba(0,0,0,0.03);
+      padding: 4px;
       border-radius: 12px;
-      font-size: 15px;
+    }
+    
+    .tab { 
+      flex: 1; 
+      padding: 12px; 
+      text-align: center; 
+      border-radius: 8px; 
+      font-size: 15px; 
       font-weight: 600;
-      cursor: pointer;
-      background: var(--card);
-      color: var(--hint);
-      transition: 0.2s;
+      cursor: pointer; 
+      color: var(--hint-color);
+      transition: 0.3s;
+    }
+    
+    .tab.active { 
+      background: var(--card-bg); 
+      color: var(--primary-color);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
-    .tab.active {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 4px 10px rgba(0, 82, 255, 0.2);
-    }
-
-    /* Поле поиска */
     .search-container {
       position: relative;
       margin-bottom: 20px;
@@ -68,72 +71,81 @@
       position: absolute;
       left: 16px;
       top: 14px;
-      color: var(--hint);
+      color: var(--hint-color);
     }
-    input {
-      width: 100%;
-      padding: 14px 14px 14px 44px;
-      border-radius: 14px;
-      border: none;
-      background: var(--card);
-      color: var(--text);
-      font-size: 16px;
+    input { 
+      width: 100%; 
+      padding: 14px 14px 14px 44px; 
+      border-radius: 14px; 
+      border: 1px solid rgba(0,0,0,0.05); 
+      background: var(--card-bg); 
+      color: var(--text-color);
+      font-size: 16px; 
       outline: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
+    input:focus { border-color: var(--primary-color); }
 
-    /* Плашка подсказки */
-    #hint-box {
+    #hint-box { 
       display: none;
-      background: rgba(0, 82, 255, 0.1);
-      color: var(--primary);
-      padding: 16px;
-      border-radius: 14px;
-      margin-bottom: 20px;
-      font-size: 15px;
+      background: var(--hint-box-bg); 
+      color: var(--hint-box-text); 
+      padding: 16px; 
+      border-radius: 14px; 
+      margin-bottom: 20px; 
+      font-size: 15px; 
       line-height: 1.4;
       font-weight: 500;
+      border-left: 4px solid var(--primary-color);
     }
     #hint-box b { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
 
-    /* Карточки */
-    .card {
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-      background: var(--card);
-      cursor: pointer;
-      transition: transform 0.1s;
+    /* Карточки с эффектом */
+    .card { 
+      border-radius: 16px; 
+      padding: 16px; 
+      margin-bottom: 12px; 
+      background: var(--card-bg); 
+      cursor: pointer; 
+      transition: transform 0.2s, box-shadow 0.2s; 
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.02);
     }
-
-    .card:active { transform: scale(0.98); }
-
-    .card-text b {
-      font-size: 16px;
+    
+    .card:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    }
+    
+    .card-text b { 
+      font-size: 16px; 
       display: block;
       margin-bottom: 4px;
       font-weight: 600;
+      color: var(--text-color);
     }
-
-    .card-text span {
-      font-size: 14px;
-      color: var(--hint);
+    
+    .card-text span { 
+      font-size: 14px; 
+      color: var(--hint-color); 
       display: block;
       margin-top: 2px;
     }
 
     .arrow {
-      font-size: 20px;
-      color: var(--hint);
+      font-size: 24px;
+      color: var(--primary-color);
       font-weight: bold;
+      opacity: 0.5;
     }
   </style>
 </head>
 <body>
   <h1>Опека и КДН</h1>
-
+  
   <div id="hint-box">
     <b>Куда обращаться</b>
     <span id="hint-text"></span>
@@ -143,12 +155,12 @@
     <div class="tab active" onclick="switchTab('opeka')">🏠 Опека</div>
     <div class="tab" onclick="switchTab('kdn')">⚖️ КДН</div>
   </div>
-
+  
   <div class="search-container">
     <span class="search-icon">🔍</span>
     <input id="search" placeholder="Поиск района..." oninput="filter()">
   </div>
-
+  
   <div id="list"></div>
 
   <script>
@@ -188,7 +200,7 @@
 
     function switchTab(tab) {
       currentTab = tab;
-      document.getElementById('search').value = '';
+      document.getElementById('search').value = ''; 
       document.querySelectorAll('.tab').forEach((el, i) => {
         el.classList.toggle('active', (tab === 'opeka' && i === 0) || (tab === 'kdn' && i === 1));
       });
