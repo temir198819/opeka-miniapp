@@ -28,9 +28,9 @@
 </head>
 <body>
   <h1>📍 Опека и КДН КБР</h1>
-  <div class="tabs" id="tabs">
-    <div class="tab active" onclick="switchTab('opeka')">Опека</div>
-    <div class="tab" onclick="switchTab('kdn')">КДН</div>
+    <div id="hint-box" style="display: none; background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.95rem; border: 1px solid #ffeeba; line-height: 1.4;">
+    <b>💡 КУДА ОБРАЩАТЬСЯ:</b><br>
+    <span id="hint-text"></span>
   </div>
   <input id="search" placeholder="Поиск по району или адресу..." oninput="filter()">
   
@@ -182,18 +182,25 @@
       render(filtered);
     }
 
-        // Инициализация
+           // Инициализация
     render(OPЕКА = OPEKA);
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
 
-    // Читаем параметр из ссылки (например, ?filter=kdn)
+    // Читаем параметры из ссылки
     const urlParams = new URLSearchParams(window.location.search);
     const filterParam = urlParams.get('filter');
-    
-    // Если бот передал параметр kdn, автоматически переключаем вкладку
+    const hintParam = urlParams.get('hint');
+
+    // Если бот передал параметр kdn, переключаем вкладку
     if (filterParam === 'kdn') {
         switchTab('kdn');
+    }
+
+    // Если бот передал подсказку (hint), показываем её
+    if (hintParam) {
+        document.getElementById('hint-text').innerText = decodeURIComponent(hintParam);
+        document.getElementById('hint-box').style.display = 'block';
     }
   </script>
 </body>
