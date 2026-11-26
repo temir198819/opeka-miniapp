@@ -57,13 +57,13 @@
     .label { font-size: 13px; color: var(--hint-color); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 6px; }
     .value { font-size: 16px; font-weight: 500; line-height: 1.5; }
     
-    /* Кнопки копирования */
+    /* ОДИНАКОВЫЕ КНОПКИ ДЛЯ ВСЕХ НОМЕРОВ */
     .copy-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background: var(--primary-color);
+      background: var(--primary-color); /* Один цвет для всех */
       color: #fff;
       text-align: center;
       padding: 16px;
@@ -71,18 +71,15 @@
       font-weight: 600;
       font-size: 16px;
       margin-top: 10px;
-      box-shadow: 0 4px 12px rgba(32, 138, 79, 0.3);
+      box-shadow: 0 4px 12px rgba(32, 138, 79, 0.2);
       border: none;
       width: 100%;
       cursor: pointer;
-      transition: 0.2s;
+      transition: transform 0.1s;
     }
     .copy-btn:active { transform: scale(0.98); }
     
-    .copy-btn.spec {
-      background: #2ecc71; 
-      box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-    }
+    /* Убираем кастомный стиль для специалистов, чтобы кнопки были идентичны */
   </style>
 </head>
 <body>
@@ -131,11 +128,11 @@
     const item = data[id];
     const contentDiv = document.getElementById('content');
 
-    // Функция для копирования текста
+    // Функция копирования
     function copyToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
-          showNotification("Номер скопирован: " + text + "\n\nВставьте его в приложение 'Телефон' для звонка.");
+          showNotification("Номер скопирован: " + text + "\n\nТеперь вставьте его в звонилку.");
         }).catch(() => {
           fallbackCopy(text);
         });
@@ -179,13 +176,14 @@
           <div class="info-block">
             <div class="label">Начальник</div>
             <div class="value">${item.head}</div>
+            <!-- Убрал class="spec", чтобы кнопка была такой же, как у начальника -->
             <button onclick="copyToClipboard('${item.phone}')" class="copy-btn">📞 Скопировать: ${item.phone}</button>
           </div>
 
           <div class="info-block">
             <div class="label">Специалисты</div>
             <div class="value">${item.spec}</div>
-            <button onclick="copyToClipboard('${item.specPhone}')" class="copy-btn spec">📞 Скопировать: ${item.specPhone}</button>
+            <button onclick="copyToClipboard('${item.specPhone}')" class="copy-btn">📞 Скопировать: ${item.specPhone}</button>
           </div>
           
           <div class="info-block">
