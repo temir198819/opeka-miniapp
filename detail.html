@@ -3,76 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Подробная информация</title>
+  <title>Информация</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-color: var(--tg-theme-bg-color, #f4f7f6);
-      --text-color: var(--tg-theme-text-color, #2c3e50);
-      --primary: #0077B6; 
-      --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
-      --shadow: 0 4px 12px rgba(0,0,0,0.05);
-      --success: #2ecc71;
+      --bg: var(--tg-theme-bg-color, #ffffff);
+      --text: var(--tg-theme-text-color, #000000);
+      --hint: var(--tg-theme-hint-color, #999999);
+      --primary: #0052FF;
+      --card: var(--tg-theme-secondary-bg-color, #f2f2f7);
     }
 
-    body { 
-      font-family: 'Segoe UI', system-ui, sans-serif; 
-      padding: 20px; 
-      background: var(--bg-color); 
-      color: var(--text-color); 
-      margin: 0; 
-      padding-bottom: 40px; 
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+      padding-bottom: 40px;
     }
 
-    .back-btn { 
-      display: inline-flex; 
+    .back-btn {
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 20px; 
-      padding: 10px 16px; 
-      background: var(--card-bg); 
-      color: var(--primary); 
-      text-decoration: none; 
-      border-radius: 12px; 
-      font-size: 0.95rem; 
+      margin-bottom: 24px;
+      padding: 8px 0;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 16px;
       font-weight: 600;
-      box-shadow: var(--shadow);
-      transition: 0.2s;
-    }
-    .back-btn:hover { transform: translateX(-3px); }
-
-    .card { 
-      border-radius: 16px; 
-      padding: 24px; 
-      background: var(--card-bg); 
-      box-shadow: var(--shadow);
     }
 
-    h2 { 
-      color: var(--primary); 
-      margin-top: 0; 
-      font-size: 1.4rem; 
-      border-bottom: 2px solid rgba(0, 119, 182, 0.2);
-      padding-bottom: 12px;
-      margin-bottom: 16px;
+    .card {
+      border-radius: 20px;
+      padding: 24px;
+      background: var(--card);
     }
 
-    .info-row { margin: 16px 0; }
-    .label { font-size: 0.85rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
-    .value { font-size: 1.05rem; font-weight: 500; }
-    .value a { color: var(--success); text-decoration: none; font-weight: 700; }
-    
-    .phone-link {
-      display: inline-block;
-      background: rgba(46, 204, 113, 0.1);
-      padding: 6px 12px;
-      border-radius: 8px;
-      margin-top: 4px;
+    h2 {
+      margin-top: 0;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .info-block { margin-bottom: 20px; }
+    .label { font-size: 13px; color: var(--hint); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+    .value { font-size: 16px; font-weight: 500; line-height: 1.4; }
+
+    /* Красивая большая кнопка позвонить */
+    .call-btn {
+      display: block;
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 16px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 8px;
+      box-shadow: 0 4px 12px rgba(0, 82, 255, 0.2);
     }
   </style>
 </head>
 <body>
-  <a href="index.html" class="back-btn">← Назад к списку</a>
-  
+  <a href="index.html" class="back-btn">‹ Назад</a>
+
   <div class="card" id="content"></div>
 
   <script>
@@ -93,19 +93,19 @@
     ];
 
     const KDN = [
-      { name: "Урванский район", addr: "г.п. Нарткала, ул. Ленина д.37 каб.6", phone: "8(86635) 4-10-70", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский д.39", phone: "8(86638) 4-72-15", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15, каб.100", phone: "8(86632) 4-17-44", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Баксанский район", addr: "г. Баксан, ул. Гагарина, 1Е", phone: "8(86634) 4-12-28", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Лескенский район", addr: "с. Анзорей, Шинахова 1А", phone: "8(86639) 9-56-0", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Чегемский район", addr: "г.п. Чегем, Баксанское шоссе, 3", phone: "8(86630) 4-00-27", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "г. Баксан", addr: "пр-кт Ленина, 21, каб. 14", phone: "8(86634) 2-13-91", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Черекский район", addr: "п. Кашхатау, ул. Мечиева 108", phone: "—", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Зольский район", addr: "п. Залукокоаже, ул. Комсомольская, 89", phone: "8(86637) 4-16-68", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "г. Нальчик", addr: "ул. Кешокова, 70", phone: "8(8662) 77-48-60", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "г. Прохладный", addr: "г. Прохладный", phone: "8(86631) 4-14-49", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Прохладненский район", addr: "ул. Гагарина, 47, каб. 401", phone: "8(86631) 4-11-48", head: "—", spec: "—", specPhone: "—", hours: "—" },
-      { name: "Майский район", addr: "ул. Энгельса, 68", phone: "8(86633) 23-7-25", head: "—", spec: "—", specPhone: "—", hours: "—" }
+      { name: "Урванский район", addr: "г.п. Нарткала, ул. Ленина д.37 каб.6", phone: "8(86635) 4-10-70" },
+      { name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский д.39", phone: "8(86638) 4-72-15" },
+      { name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15, каб.100", phone: "8(86632) 4-17-44" },
+      { name: "Баксанский район", addr: "г. Баксан, ул. Гагарина, 1Е", phone: "8(86634) 4-12-28" },
+      { name: "Лескенский район", addr: "с. Анзорей, Шинахова 1А", phone: "8(86639) 9-56-0" },
+      { name: "Чегемский район", addr: "г.п. Чегем, Баксанское шоссе, 3", phone: "8(86630) 4-00-27" },
+      { name: "г. Баксан", addr: "пр-кт Ленина, 21, каб. 14", phone: "8(86634) 2-13-91" },
+      { name: "Черекский район", addr: "п. Кашхатау, ул. Мечиева 108", phone: "—" },
+      { name: "Зольский район", addr: "п. Залукокоаже, ул. Комсомольская, 89", phone: "8(86637) 4-16-68" },
+      { name: "г. Нальчик", addr: "ул. Кешокова, 70", phone: "8(8662) 77-48-60" },
+      { name: "г. Прохладный", addr: "г. Прохладный", phone: "8(86631) 4-14-49" },
+      { name: "Прохладненский район", addr: "ул. Гагарина, 47, каб. 401", phone: "8(86631) 4-11-48" },
+      { name: "Майский район", addr: "ул. Энгельса, 68", phone: "8(86633) 23-7-25" }
     ];
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -120,35 +120,39 @@
       if (type === 'opeka') {
         contentDiv.innerHTML = `
           <h2>${item.name}</h2>
-          <div class="info-row">
+
+          <div class="info-block">
             <div class="label">Адрес</div>
-            <div class="value">🏠 ${item.addr}</div>
+            <div class="value">${item.addr}</div>
           </div>
-          <div class="info-row">
-            <div class="label">Начальник отдела</div>
-            <div class="value">👤 ${item.head}</div>
-            <div class="value phone-link">📞 <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></div>
+
+          <div class="info-block">
+            <div class="label">Начальник</div>
+            <div class="value">${item.head}</div>
+            <a href="tel:${item.phone.replace(/[^+\d]/g,'')}" class="call-btn">📞 Позвонить: ${item.phone}</a>
           </div>
-          <div class="info-row">
+
+          <div class="info-block">
             <div class="label">Специалисты</div>
-            <div class="value">👥 ${item.spec}</div>
-            <div class="value phone-link">📞 <a href="tel:${item.specPhone.replace(/[^+\d]/g,'')}">${item.specPhone}</a></div>
+            <div class="value">${item.spec}</div>
+            <a href="tel:${item.specPhone.replace(/[^+\d]/g,'')}" class="call-btn" style="background: #34C759;">📞 Позвонить: ${item.specPhone}</a>
           </div>
-          <div class="info-row">
+
+          <div class="info-block">
             <div class="label">Часы приема</div>
-            <div class="value">🕒 ${item.hours}</div>
+            <div class="value">${item.hours}</div>
           </div>
         `;
       } else {
         contentDiv.innerHTML = `
           <h2>КДН ${item.name}</h2>
-          <div class="info-row">
+          <div class="info-block">
             <div class="label">Адрес</div>
-            <div class="value">🏠 ${item.addr}</div>
+            <div class="value">${item.addr}</div>
           </div>
-          <div class="info-row">
+          <div class="info-block">
             <div class="label">Телефон</div>
-            <div class="value phone-link">📞 <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></div>
+            <a href="tel:${item.phone.replace(/[^+\d]/g,'')}" class="call-btn">📞 Позвонить: ${item.phone}</a>
           </div>
         `;
       }
