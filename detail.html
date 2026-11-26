@@ -6,23 +6,76 @@
   <title>Подробная информация</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { font-family: system-ui, sans-serif; padding: 16px; background: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); margin: 0; padding-bottom: 40px; }
-    .back-btn { display: inline-block; margin-bottom: 16px; padding: 8px 12px; background: #2AABEE; color: #fff; text-decoration: none; border-radius: 8px; font-size: 0.9rem; font-weight: bold; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; background: var(--tg-theme-secondary-bg-color, #f5f5f5); }
-    h2 { color: #2AABEE; margin-top: 0; font-size: 1.3rem; }
-    p { margin: 10px 0; font-size: 1rem; line-height: 1.4; }
-    a { color: #2AABEE; text-decoration: none; font-weight: bold; }
+    :root {
+      --bg-color: var(--tg-theme-bg-color, #f4f7f6);
+      --text-color: var(--tg-theme-text-color, #2c3e50);
+      --primary: #0077B6; 
+      --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+      --shadow: 0 4px 12px rgba(0,0,0,0.05);
+      --success: #2ecc71;
+    }
+
+    body { 
+      font-family: 'Segoe UI', system-ui, sans-serif; 
+      padding: 20px; 
+      background: var(--bg-color); 
+      color: var(--text-color); 
+      margin: 0; 
+      padding-bottom: 40px; 
+    }
+
+    .back-btn { 
+      display: inline-flex; 
+      align-items: center;
+      margin-bottom: 20px; 
+      padding: 10px 16px; 
+      background: var(--card-bg); 
+      color: var(--primary); 
+      text-decoration: none; 
+      border-radius: 12px; 
+      font-size: 0.95rem; 
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      transition: 0.2s;
+    }
+    .back-btn:hover { transform: translateX(-3px); }
+
+    .card { 
+      border-radius: 16px; 
+      padding: 24px; 
+      background: var(--card-bg); 
+      box-shadow: var(--shadow);
+    }
+
+    h2 { 
+      color: var(--primary); 
+      margin-top: 0; 
+      font-size: 1.4rem; 
+      border-bottom: 2px solid rgba(0, 119, 182, 0.2);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .info-row { margin: 16px 0; }
+    .label { font-size: 0.85rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 4px; }
+    .value { font-size: 1.05rem; font-weight: 500; }
+    .value a { color: var(--success); text-decoration: none; font-weight: 700; }
+    
+    .phone-link {
+      display: inline-block;
+      background: rgba(46, 204, 113, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
   <a href="index.html" class="back-btn">← Назад к списку</a>
   
-  <div class="card" id="content">
-    <!-- Сюда будет подставляться текст -->
-  </div>
+  <div class="card" id="content"></div>
 
   <script>
-    // Данные всех районов
     const OPEKA = [
       { name: "г.о. Нальчик", addr: "г. Нальчик, пр. Шогенцукова, 17", phone: "(8662) 42-64-13", head: "Улаков Салим Курманбекович", spec: "Хараева Иола Анатольевна, Бирсова Шовина Лериевна", specPhone: "(8662) 42-49-85", hours: "Пн, Чт 9:00–13:00, 14:00–18:00" },
       { name: "г.о. Прохладный", addr: "г. Прохладный, ул. Головко, д. 345", phone: "8(86631) 4-25-67", head: "Чубова Елена Сергеевна", spec: "Бондаренко М.А., Голубничая И.В., Шаповалова Т.Н., Шанкова З.А., Баун А.О.", specPhone: "8(86631) 4-25-67", hours: "Пн, Чт 09:00–18:00" },
@@ -55,7 +108,6 @@
       { name: "Майский район", addr: "ул. Энгельса, 68", phone: "8(86633) 23-7-25", head: "—", spec: "—", specPhone: "—", hours: "—" }
     ];
 
-    // Получаем параметры из ссылки (например, ?type=opeka&id=12)
     const urlParams = new URLSearchParams(window.location.search);
     const type = urlParams.get('type');
     const id = urlParams.get('id');
@@ -68,18 +120,36 @@
       if (type === 'opeka') {
         contentDiv.innerHTML = `
           <h2>${item.name}</h2>
-          <p><b>🏠 Адрес:</b> ${item.addr}</p>
-          <p><b>👤 Начальник:</b> ${item.head}</p>
-          <p><b>📞 Тел. начальника:</b> <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></p>
-          <p><b>👥 Специалисты:</b> ${item.spec}</p>
-          <p><b>📞 Тел. специалистов:</b> <a href="tel:${item.specPhone.replace(/[^+\d]/g,'')}">${item.specPhone}</a></p>
-          <p><b>🕒 Прием:</b> ${item.hours}</p>
+          <div class="info-row">
+            <div class="label">Адрес</div>
+            <div class="value">🏠 ${item.addr}</div>
+          </div>
+          <div class="info-row">
+            <div class="label">Начальник отдела</div>
+            <div class="value">👤 ${item.head}</div>
+            <div class="value phone-link">📞 <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></div>
+          </div>
+          <div class="info-row">
+            <div class="label">Специалисты</div>
+            <div class="value">👥 ${item.spec}</div>
+            <div class="value phone-link">📞 <a href="tel:${item.specPhone.replace(/[^+\d]/g,'')}">${item.specPhone}</a></div>
+          </div>
+          <div class="info-row">
+            <div class="label">Часы приема</div>
+            <div class="value">🕒 ${item.hours}</div>
+          </div>
         `;
       } else {
         contentDiv.innerHTML = `
           <h2>КДН ${item.name}</h2>
-          <p><b>🏠 Адрес:</b> ${item.addr}</p>
-          <p><b>📞 Телефон:</b> <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></p>
+          <div class="info-row">
+            <div class="label">Адрес</div>
+            <div class="value">🏠 ${item.addr}</div>
+          </div>
+          <div class="info-row">
+            <div class="label">Телефон</div>
+            <div class="value phone-link">📞 <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></div>
+          </div>
         `;
       }
     } else {
