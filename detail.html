@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подробная информация</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 16px; background: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); margin: 0; padding-bottom: 40px; }
+    .back-btn { display: inline-block; margin-bottom: 16px; padding: 8px 12px; background: #2AABEE; color: #fff; text-decoration: none; border-radius: 8px; font-size: 0.9rem; font-weight: bold; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; background: var(--tg-theme-secondary-bg-color, #f5f5f5); }
+    h2 { color: #2AABEE; margin-top: 0; font-size: 1.3rem; }
+    p { margin: 10px 0; font-size: 1rem; line-height: 1.4; }
+    a { color: #2AABEE; text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-btn">← Назад к списку</a>
+  
+  <div class="card" id="content">
+    <!-- Сюда будет подставляться текст -->
+  </div>
+
+  <script>
+    // Данные всех районов
+    const OPEKA = [
+      { name: "г.о. Нальчик", addr: "г. Нальчик, пр. Шогенцукова, 17", phone: "(8662) 42-64-13", head: "Улаков Салим Курманбекович", spec: "Хараева Иола Анатольевна, Бирсова Шовина Лериевна", specPhone: "(8662) 42-49-85", hours: "Пн, Чт 9:00–13:00, 14:00–18:00" },
+      { name: "г.о. Прохладный", addr: "г. Прохладный, ул. Головко, д. 345", phone: "8(86631) 4-25-67", head: "Чубова Елена Сергеевна", spec: "Бондаренко М.А., Голубничая И.В., Шаповалова Т.Н., Шанкова З.А., Баун А.О.", specPhone: "8(86631) 4-25-67", hours: "Пн, Чт 09:00–18:00" },
+      { name: "г.о. Баксан", addr: "г. Баксан, ул. Буденного, 91 (юр.), ул. Ленина, 21 (факт.)", phone: "(886634) 4-12-54", head: "Канукоева Динара Хасановна", spec: "Апанасов Р.А., Хамукова И.Н., Хашпаков А.Х., Дугужева М.А., Даурова М.А.", specPhone: "(886634) 4-12-54", hours: "Пн–Пт 9:00–18:00, перерыв 13–14" },
+      { name: "Баксанский район", addr: "г. Баксан, ул. им. Ю.А. Гагарина, 1е", phone: "(886634) 2-10-75", head: "Кумыкова Анжела Мусабиевна", spec: "Губжокова Ф.Б., Кумыкова А.М., Шидова Д.Х., Шибзухова Ф.Х.", specPhone: "(886634) 2-10-75", hours: "Пн–Пт 9:00–18:00, перерыв 13–14" },
+      { name: "Зольский район", addr: "п. Залукокоаже, ул. им. И.Ц. Котова, 16", phone: "8(86637) 4-15-44", head: "Жирикова Аминат Бубовна", spec: "Махова А.Х., Кокова М.М., Теуважева М.А., Акежева О.Л.", specPhone: "8(86637) 4-15-44", hours: "Пн–Пт 9:00–18:00" },
+      { name: "Лескенский район", addr: "с. Анзорей, ул. Шинахова, 1а", phone: "(886639) 9-54-11", head: "Абазова Залина Аслановна", spec: "Ханикова М.М., Хачетлова А.А.", specPhone: "(886639) 9-54-11", hours: "Пн–Чт 9:00–18:00, перерыв 13–14" },
+      { name: "Майский район", addr: "г. Майский, ул. Ленина, 27/2", phone: "(86633) 21-7-01", head: "Тменова Залина Юрьевна", spec: "Дзадзиева О.В., Водогрецкая Н.В., Барагунова В.Р.", specPhone: "8(86633) 21-7-01", hours: "Пн–Чт 8:00–17:00, перерыв 12–13" },
+      { name: "Прохладненский район", addr: "г. Прохладный, ул. Красноармейская, д.129", phone: "(86631) 7-67-90", head: "Казакова Анна Владимировна", spec: "Кесель Т.В., Адамокова И.С., Филимонова А.В., Мотлох С.Ф.", specPhone: "(86631) 7-59-48", hours: "Пн–Чт 8:00–17:00, Пт 8:00–12:00, перерыв 12–13" },
+      { name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15а", phone: "8(86632) 4-18-47", head: "Дудуева Маргарита Хамишевна", spec: "Бекишева Р.Х., Балкарова З.Р., Абазова М.А., Тумова Д.О., Шомахова М.В.", specPhone: "8(86632) 4-18-47", hours: "Пн–Чт 8:45–18:00, Пт 8:45–16:45, перерыв 13–14" },
+      { name: "Урванский район", addr: "г. Нарткала, ул. Ленина, 35", phone: "(86635) 4-30-62", head: "Эркенова Марина Мурадиновна", spec: "Тлежукова Р.К., Кагермазова И.В., Тлежукова К.Ю., Ивазова Л.Э.", specPhone: "(86635) 4-30-62", hours: "Пн 14:00–18:00, Вт–Чт 9:00–13:00" },
+      { name: "Чегемский район", addr: "г. Чегем, ул. Баксанское шоссе, 26", phone: "8(86630) 4-10-48", head: "Ахиева Анжела Артуровна", spec: "Бижева С.З., Кулиева Л.И., Шанова Ф.Х., Гучаева Л.М., Гукетлова И.А.", specPhone: "8(86630) 4-10-48", hours: "Пн–Пт 9:00–18:00, перерыв 13–14" },
+      { name: "Черекский район", addr: "п.г.т. Кашхатау, ул. К. Мечиева, 108", phone: "8(86636) 4-10-20", head: "Кульбаева Халимат Магомедовна", spec: "Хозаева С.Б., Иттиев К.М., Чеченов М.М.", specPhone: "(86636) 4-10-20", hours: "Пн, Вт, Чт 9:00–18:00" },
+      { name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский, 39", phone: "(86638) 4-37-52", head: "Моллаев Азамат Иман-Алимович", spec: "Карданова М.Б., Хаджиева Х.З., Моллаева Л.Б., Макитов Р.Б.", specPhone: "(86638) 4-37-52", hours: "9:00–18:00, перерыв 13–14" }
+    ];
+
+    const KDN = [
+      { name: "Урванский район", addr: "г.п. Нарткала, ул. Ленина д.37 каб.6", phone: "8(86635) 4-10-70", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Эльбрусский район", addr: "г.п. Тырныауз, пр. Эльбрусский д.39", phone: "8(86638) 4-72-15", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Терский район", addr: "г.п. Терек, ул. Ленина, 15, каб.100", phone: "8(86632) 4-17-44", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Баксанский район", addr: "г. Баксан, ул. Гагарина, 1Е", phone: "8(86634) 4-12-28", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Лескенский район", addr: "с. Анзорей, Шинахова 1А", phone: "8(86639) 9-56-0", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Чегемский район", addr: "г.п. Чегем, Баксанское шоссе, 3", phone: "8(86630) 4-00-27", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "г. Баксан", addr: "пр-кт Ленина, 21, каб. 14", phone: "8(86634) 2-13-91", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Черекский район", addr: "п. Кашхатау, ул. Мечиева 108", phone: "—", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Зольский район", addr: "п. Залукокоаже, ул. Комсомольская, 89", phone: "8(86637) 4-16-68", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "г. Нальчик", addr: "ул. Кешокова, 70", phone: "8(8662) 77-48-60", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "г. Прохладный", addr: "г. Прохладный", phone: "8(86631) 4-14-49", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Прохладненский район", addr: "ул. Гагарина, 47, каб. 401", phone: "8(86631) 4-11-48", head: "—", spec: "—", specPhone: "—", hours: "—" },
+      { name: "Майский район", addr: "ул. Энгельса, 68", phone: "8(86633) 23-7-25", head: "—", spec: "—", specPhone: "—", hours: "—" }
+    ];
+
+    // Получаем параметры из ссылки (например, ?type=opeka&id=12)
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+    const id = urlParams.get('id');
+
+    const data = type === 'opeka' ? OPEKA : KDN;
+    const item = data[id];
+    const contentDiv = document.getElementById('content');
+
+    if (item) {
+      if (type === 'opeka') {
+        contentDiv.innerHTML = `
+          <h2>${item.name}</h2>
+          <p><b>🏠 Адрес:</b> ${item.addr}</p>
+          <p><b>👤 Начальник:</b> ${item.head}</p>
+          <p><b>📞 Тел. начальника:</b> <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></p>
+          <p><b>👥 Специалисты:</b> ${item.spec}</p>
+          <p><b>📞 Тел. специалистов:</b> <a href="tel:${item.specPhone.replace(/[^+\d]/g,'')}">${item.specPhone}</a></p>
+          <p><b>🕒 Прием:</b> ${item.hours}</p>
+        `;
+      } else {
+        contentDiv.innerHTML = `
+          <h2>КДН ${item.name}</h2>
+          <p><b>🏠 Адрес:</b> ${item.addr}</p>
+          <p><b>📞 Телефон:</b> <a href="tel:${item.phone.replace(/[^+\d]/g,'')}">${item.phone}</a></p>
+        `;
+      }
+    } else {
+      contentDiv.innerHTML = `<p>Информация не найдена.</p>`;
+    }
+
+    Telegram.WebApp.ready();
+  </script>
+</body>
+</html>
